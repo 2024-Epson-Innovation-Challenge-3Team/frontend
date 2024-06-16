@@ -1,5 +1,15 @@
+import { useCreateJobPage } from './useCreateJobPage'
+
 export function CreateJobPage() {
+  const {
+    file,
+  } = useCreateJobPage()
+
   return (
-    <div>create job</div>
+    <div>
+      {file ? (
+        <div>{file.name}</div>
+      ) : null}
+    </div>
   )
 }

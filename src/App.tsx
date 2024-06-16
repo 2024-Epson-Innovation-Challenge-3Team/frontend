@@ -12,7 +12,7 @@ const queryClient = new QueryClient()
 const store = getDefaultStore()
 
 export function App() {
-  const [messageApi, messageContextHolder] = message.useMessage()
+  const [messageApi, messageContextHolder] = message.useMessage({ top: 48 })
   const [modalApi, modalContextHolder] = Modal.useModal()
   const [notificationApi, notificationContextHolder] = notification.useNotification()
 

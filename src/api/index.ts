@@ -13,7 +13,7 @@ export type LoggedInUser = {
 
 export async function login(): Promise<LoggedInUser> {
   // const client = getDefaultStore().get(ClientAtom)
-  await wait(1000)
+  await wait(200)
 
   return {
     id: 1,
