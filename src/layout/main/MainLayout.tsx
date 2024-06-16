@@ -13,13 +13,17 @@ import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import styled from '@emotion/styled'
 import { Global } from '@emotion/react'
 
-// import { useMainLayout } from './useMainLayout'
+import { useMainLayout } from './useMainLayout'
 
 const { Header, Content } = Layout
 const { Text } = Typography
 
 export function MainLayout() {
-  // const {} = useMainLayout()
+  const {
+    my,
+    isLoggedOut,
+    isHome,
+  } = useMainLayout()
 
   return (
     <Layout style={{ height: '100%' }}>
@@ -27,7 +31,7 @@ export function MainLayout() {
         style={{
           background: '#fff',
           borderBottom: '1px solid #efefef',
-          padding: '0 20px',
+          padding: '0 8px',
           display: 'grid',
           gridTemplateColumns: '1fr 3fr 1fr',
           gridTemplateRows: '1fr',
@@ -38,8 +42,7 @@ export function MainLayout() {
           <Logo src='/logo.png' />
         </LogoWrapper>
         <Right>
-          {/* {false ? ( */}
-          {true ? (
+          {my ? (
             <Popover
               content={(
                 <Flex vertical>
@@ -49,13 +52,12 @@ export function MainLayout() {
                       icon={<UserOutlined />}
                     />
                     <Flex vertical>
-                      <Text strong>마장홍선</Text>
-                      <Text type='secondary'>ghdtjs0417@gmail.com</Text>
+                      <Text strong>{my.name}</Text>
+                      <Text type='secondary'>{my.email}</Text>
                     </Flex>
                   </Space>
 
-                  {/* {false ? ( */}
-                  {true ? (
+                  {isHome ? (
                     <>
                       <Divider style={{ margin: '12px 0' }} />
 
@@ -74,15 +76,15 @@ export function MainLayout() {
                     </>
                   ) : null}
                 </Flex>
-                // <div style={{ width: '100%' }}>aaa</div>
               )}
               trigger='click'
+              arrow={false}
             >
               <Avatar size='small' icon={<UserOutlined />} />
             </Popover>
-          ) : (
+          ) : isLoggedOut ? (
             <Button size='small'>로그인</Button>
-          )}
+          ) : null}
         </Right>
         <Global
           styles={{

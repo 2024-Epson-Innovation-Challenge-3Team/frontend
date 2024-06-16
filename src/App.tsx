@@ -1,4 +1,4 @@
-import { Provider } from 'jotai'
+import { Provider, getDefaultStore } from 'jotai'
 import { RouterProvider } from 'react-router-dom'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -9,6 +9,7 @@ import { MessageContext, ModalContext, NotificationContext } from './context'
 import { antdTheme } from './config'
 
 const queryClient = new QueryClient()
+const store = getDefaultStore()
 
 export function App() {
   const [messageApi, messageContextHolder] = message.useMessage()
@@ -16,7 +17,7 @@ export function App() {
   const [notificationApi, notificationContextHolder] = notification.useNotification()
 
   return (
-    <Provider>
+    <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools buttonPosition='bottom-left' />
         <ConfigProvider theme={antdTheme}>
