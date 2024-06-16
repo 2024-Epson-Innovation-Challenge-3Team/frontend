@@ -1,11 +1,16 @@
 import { createBrowserRouter } from 'react-router-dom'
 
-import { MobileLayout, MainLayout } from '@/layout'
-import { ErrorBoundary, LoginRequired } from '@/component'
+import { ErrorBoundary } from '@/component'
+import {
+  MobileLayout,
+  MainLayout,
+  LoginRequiredLayout,
+} from '@/layout'
 import {
   HomePage,
   LoginPage,
   CreateJobPage,
+  MapPage,
 } from '@/page'
 
 export const router = createBrowserRouter([
@@ -24,8 +29,17 @@ export const router = createBrowserRouter([
             element: <HomePage />,
           },
           {
-            path: '/create-job',
-            element: <LoginRequired><CreateJobPage /></LoginRequired>,
+            path: '/map',
+            element: <MapPage />,
+          },
+          {
+            element: <LoginRequiredLayout />,
+            children: [
+              {
+                path: '/create-job',
+                element: <CreateJobPage />,
+              },
+            ],
           },
         ],
       },

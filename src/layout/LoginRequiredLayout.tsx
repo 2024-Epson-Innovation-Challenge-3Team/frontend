@@ -1,5 +1,5 @@
-import { ReactNode, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useNavigate, useLocation, Outlet } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { Flex, Spin, Alert } from 'antd'
 
@@ -16,11 +16,7 @@ const REDIRECT_PATHS = [
   '/authenticate-zone',
 ]
 
-export type LoginRequiredProps = {
-  children: ReactNode,
-}
-
-export function LoginRequired({ children }: LoginRequiredProps) {
+export function LoginRequiredLayout() {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -43,7 +39,7 @@ export function LoginRequired({ children }: LoginRequiredProps) {
   return (
     <>
       {my ? (
-        <>{children}</>
+        <Outlet />
       ) : isAuthenticating ? (
         <Flex justify='center' align='center' style={{ width: '100%', height: '100%' }}>
           <Spin size='large' />

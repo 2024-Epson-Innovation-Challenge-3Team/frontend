@@ -1,5 +1,11 @@
+import { Upload, Button } from 'antd'
+
 export function HomePage() {
   return (
-    <div>home</div>
+    <div>
+      <Upload>
+        <Button>업로드</Button>
+      </Upload>
+    </div>
   )
 }
