@@ -36,3 +36,43 @@ export async function createJob(job: JobReq): Promise<void> {
 
   await delay(1000)
 }
+
+export type AssignPrinterResult = {
+  type: 'assignPrinter',
+  printerId: number,
+  printerName: string,
+}
+
+export type QueuedResult = {
+  type: 'queued',
+  queueNumber: number,
+}
+
+export type NoFileResult = {
+  type: 'noFile',
+}
+
+export type LocationVerificationResult = AssignPrinterResult | QueuedResult | NoFileResult
+
+export async function verifyZone(zoneId: number): Promise<LocationVerificationResult> {
+  console.log(zoneId)
+
+  await delay(3000)
+
+  return {
+    type: 'queued',
+    queueNumber: 3,
+  }
+}
+
+export async function verifyPrinter(printerId: number): Promise<LocationVerificationResult> {
+  console.log(printerId)
+
+  await delay(3000)
+
+  return {
+    type: 'assignPrinter',
+    printerId: 1,
+    printerName: '3',
+  }
+}
