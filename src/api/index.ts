@@ -2,7 +2,7 @@
 
 // import { ClientAtom } from '@/atom'
 
-const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
+const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
 
 export type LoggedInUser = {
   id: number,
@@ -13,7 +13,7 @@ export type LoggedInUser = {
 
 export async function login(): Promise<LoggedInUser> {
   // const client = getDefaultStore().get(ClientAtom)
-  await wait(200)
+  await delay(200)
 
   return {
     id: 1,
@@ -21,4 +21,18 @@ export async function login(): Promise<LoggedInUser> {
     email: 'ghdtjs@gmail.com',
     profile: null,
   }
+}
+
+export type JobReq = {
+  file: File,
+  count: number,
+  direction: string,
+  countPerPage: number,
+  side: string,
+}
+
+export async function createJob(job: JobReq): Promise<void> {
+  console.log('job', job)
+
+  await delay(1000)
 }

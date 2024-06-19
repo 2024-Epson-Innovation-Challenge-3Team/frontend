@@ -11,7 +11,7 @@ import {
 } from 'antd'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import styled from '@emotion/styled'
-import { Global } from '@emotion/react'
+import { Global, css } from '@emotion/react'
 
 import { useMainLayout } from './useMainLayout'
 
@@ -87,12 +87,18 @@ export function MainLayout() {
           ) : null}
         </Right>
         <Global
-          styles={{
-            '.ant-popover': {
-              width: '100%',
-              padding: '0 8px',
+          styles={css`
+            .ant-popover {
+              width: 100%;
+              padding: 0 8px;
             }
-          }}
+
+            @media (min-width: 430px) {
+              .ant-popover {
+                padding: 0 calc(calc(calc(100% - 430px) / 2) + 8px);
+              }
+            }
+          `}
         />
       </Header>
       <Content style={{ overflow: 'auto' }}>
