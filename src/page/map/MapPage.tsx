@@ -1,7 +1,7 @@
 import { Suspense, memo } from 'react'
 import styled from '@emotion/styled'
 
-import { LaziedPrinterMap } from './component'
+import { LaziedPrinterMap } from './LaziedPrinterMap'
 
 export const MapPage = memo(function () {
   return (

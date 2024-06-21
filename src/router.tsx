@@ -14,6 +14,8 @@ import {
   VerifyZonePage,
   VerifyPrinterPage,
   ExecuteJobsPage,
+  WaitingStatusPage,
+  JobsPage,
 } from '@/page'
 
 export const router = createBrowserRouter([
@@ -53,6 +55,14 @@ export const router = createBrowserRouter([
               {
                 path: '/execute-printer',
                 element: <ExecuteJobsPage />,
+              },
+              {
+                path: '/waiting-status',
+                element: <WaitingStatusPage />,
+              },
+              {
+                path: '/jobs',
+                element: <JobsPage />,
               },
             ],
           },

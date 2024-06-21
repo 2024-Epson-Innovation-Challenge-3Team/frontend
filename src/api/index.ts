@@ -44,8 +44,8 @@ export type AssignPrinterResult = {
   printerName: string,
 }
 
-export type QueuedResult = {
-  type: 'queued',
+export type WaitResult = {
+  type: 'wait',
   queueNumber: number,
 }
 
@@ -53,7 +53,7 @@ export type NoFileResult = {
   type: 'noFile',
 }
 
-export type LocationVerificationResult = AssignPrinterResult | QueuedResult | NoFileResult
+export type LocationVerificationResult = AssignPrinterResult | WaitResult | NoFileResult
 
 // deprecated
 export async function verifyZone(zoneId: number): Promise<LocationVerificationResult> {
@@ -62,7 +62,7 @@ export async function verifyZone(zoneId: number): Promise<LocationVerificationRe
   await delay(3000)
 
   return {
-    type: 'queued',
+    type: 'wait',
     queueNumber: 3,
   }
 }

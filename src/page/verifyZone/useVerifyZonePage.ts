@@ -55,8 +55,8 @@ export function useVerifyZonePage() {
             return
           }
 
-          case 'queued': {
-            navigate('/queue-info', { replace: true })
+          case 'wait': {
+            navigate('/waiting-status', { replace: true })
           }
         }
       },

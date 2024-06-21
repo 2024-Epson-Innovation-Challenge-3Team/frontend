@@ -1,4 +1,4 @@
-import { usePrinterMap } from '../hook'
+import { usePrinterMap } from './usePrinterMap'
 
 export function PrinterMap() {
   usePrinterMap()

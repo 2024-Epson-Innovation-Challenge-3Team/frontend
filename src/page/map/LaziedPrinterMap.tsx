@@ -2,7 +2,7 @@ import { lazy } from 'react'
 import { getDefaultStore } from 'jotai'
 
 import { MapAtom } from '@/atom'
-import { loadMap } from '../loadMap'
+import { loadMap } from './loadMap'
 
 export const LaziedPrinterMap = lazy(async () => {
   await loadMap()

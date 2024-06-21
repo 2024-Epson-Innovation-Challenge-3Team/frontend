@@ -48,13 +48,13 @@ export function useVerifyPrinterPage() {
             return
           }
 
-          case 'queued': {
+          case 'wait': {
             modal.info({
               content: `대기가 있어 해당 프린터로 인쇄를 할 수 없습니다. 잠시 대기 후 알림을 받으면 프린트를 실행해주세요. (대기번호: ${result.queueNumber})`, // TODO: 문구 잘 이해할까?
               closable: false,
               maskClosable: false,
               onOk() {
-                navigate('/queue-info', { replace: true })
+                navigate('/waiting-status', { replace: true })
               },
             })
           }
