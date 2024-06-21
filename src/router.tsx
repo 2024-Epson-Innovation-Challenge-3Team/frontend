@@ -13,6 +13,7 @@ import {
   MapPage,
   VerifyZonePage,
   VerifyPrinterPage,
+  ExecuteJobsPage,
 } from '@/page'
 
 export const router = createBrowserRouter([
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
               {
                 path: '/verify-printer',
                 element: <VerifyPrinterPage />,
+              },
+              {
+                path: '/execute-printer',
+                element: <ExecuteJobsPage />,
               },
             ],
           },

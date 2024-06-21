@@ -38,7 +38,7 @@ export function useVerifyPrinterPage() {
       onSuccess(result) {
         switch(result.type) {
           case 'assignPrinter': {
-            navigate('/execute-print', { replace: true })
+            navigate('/execute-printer', { replace: true })
             return
           }
 
