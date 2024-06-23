@@ -1,8 +1,10 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UploadChangeParam } from 'antd/es/upload'
+import { useQuery } from '@tanstack/react-query'
 
 import { useMy } from '@/hook'
+import { getJobs, getWaitingStatus } from '@/api'
 
 export function useHomePage() {
   const navigate = useNavigate()
@@ -23,13 +25,50 @@ export function useHomePage() {
     })
   }, [navigate])
 
-  // const onClickPendingJobInfo = useCallback(() => {
+  const {
+    data: jobs,
+  } = useQuery({
+    queryKey: ['getJobs'],
+    queryFn: getJobs,
+  })
 
-  // }, [navigate])
+  const {
+    data: waitingStatus,
+  } = useQuery({
+    queryKey: ['getWaitingStatus'],
+    queryFn: getWaitingStatus
+  })
 
-  // const onClickWaitingInfo = useCallback(() => {
+  const info = useMemo(() => {
+    if (!jobs || !waitingStatus) {
+      return null
+    }
 
-  // }, [navigate])
+    if (waitingStatus) {
+      return {
+        type: 'waitingStatus',
+        content: `내 순서: ${waitingStatus.no}번째`,
+      }
+    }
+
+    return {
+      type: 'jobs',
+      content: `${jobs.reduce((prev, job) => prev + job.pageCount, 0)}페이지 대기중`,
+    }
+  }, [jobs, waitingStatus])
+
+  const onClickInfo = useCallback(() => {
+    if (!info) {
+      return
+    }
+
+    if (info.type === 'waitingStatus') {
+      navigate('/waiting-status')
+      return
+    }
+
+    navigate('/jobs')
+  }, [info, navigate])
 
   const onClickFindPrinter = useCallback(() => {
     navigate('/map')
@@ -39,8 +78,8 @@ export function useHomePage() {
     loginStatus,
     onClickUpload,
     onUploadFile,
-    // onClickPendingJobInfo,
-    // onClickWaitingInfo,
+    info,
+    onClickInfo,
     onClickFindPrinter,
   }
 }

@@ -15,8 +15,8 @@ export function HomePage() {
     loginStatus,
     onClickUpload,
     onUploadFile,
-    // onClickPendingJobInfo,
-    // onClickWaitingInfo,
+    info,
+    onClickInfo,
     onClickFindPrinter,
   } = useHomePage()
 
@@ -44,7 +44,16 @@ export function HomePage() {
               </Title>
             </Flex>
           </Upload>
-          <Text type='secondary'>&nbsp;</Text>
+          <Text
+            type='secondary'
+            onClick={onClickInfo}
+          >
+            {info ? (
+              <>{info.content}</>
+            ) : (
+              <>&nbsp;</>
+            )}
+          </Text>
         </Flex>
       </Flex>
       <Flex flex='0 0 auto'>
