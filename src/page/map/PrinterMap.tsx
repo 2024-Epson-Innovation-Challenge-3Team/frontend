@@ -1,9 +1,16 @@
+import { Spin } from 'antd'
+
 import { usePrinterMap } from './usePrinterMap'
 
 export function PrinterMap() {
-  usePrinterMap()
+  const {
+    isFetchingPrinters,
+  } = usePrinterMap()
 
   return (
-    <div></div>
+    <Spin
+      spinning={isFetchingPrinters}
+      fullscreen
+    />
   )
 }

@@ -179,6 +179,8 @@ export type Printer = {
   id: number,
   name: string,
   busyLevel: string,
+  lat: number,
+  lng: number,
 }
 
 export async function getPrinters(): Promise<Printer[]> {
@@ -189,16 +191,22 @@ export async function getPrinters(): Promise<Printer[]> {
       id: 1,
       name: '1',
       busyLevel: 'free',
+      lat: 0,
+      lng: 0,
     },
     {
       id: 2,
       name: '2',
       busyLevel: 'busy',
+      lat: 0,
+      lng: 0,
     },
     {
       id: 3,
       name: '3',
       busyLevel: 'full',
+      lat: 0,
+      lng: 0,
     },
   ]
 }
