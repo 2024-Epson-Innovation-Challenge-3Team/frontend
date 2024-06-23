@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useMount } from 'react-use'
 import { useMutation } from '@tanstack/react-query'
@@ -15,18 +15,18 @@ export function useVerifyPrinterPage() {
     const query = new URLSearchParams(location.search)
 
     const id = query.get('printerId')
-    return Number.parseInt(id ?? '', 10)
+    return id ?? ''
   }, [location])
 
   const message = useMessage()
   const modal = useModal()
 
-  const { mutate: verifyPrinterMutate } = useMutation<LocationVerificationResult, AxiosError, number>({ mutationFn: verifyPrinter })
+  const { mutate: verifyPrinterMutate } = useMutation<LocationVerificationResult, AxiosError, string>({ mutationFn: verifyPrinter })
 
   const [isVerifying, setIsVerifying] = useState(false)
 
   useMount(() => {
-    if (isNaN(printerId)) {
+    if (printerId === '') {
       message.error('잘못된 접근입니다')
       navigate('/', { replace: true })
       return
@@ -38,7 +38,7 @@ export function useVerifyPrinterPage() {
       onSuccess(result) {
         switch(result.type) {
           case 'assignPrinter': {
-            navigate('/execute-printer', { replace: true })
+            navigate('/execute-printer', { replace: true, state: { printerId } })
             return
           }
 
@@ -50,7 +50,7 @@ export function useVerifyPrinterPage() {
 
           case 'wait': {
             modal.info({
-              content: `대기가 있어 해당 프린터로 인쇄를 할 수 없습니다. 잠시 대기 후 알림을 받으면 프린트를 실행해주세요. (대기번호: ${result.queueNumber})`, // TODO: 문구 잘 이해할까?
+              content: `대기가 있어 해당 프린터로 인쇄를 할 수 없습니다. 잠시 대기 후 알림을 받으면 프린트를 실행해주세요. (대기번호: ${result.waitNumber})`, // TODO: 문구 잘 이해할까?
               closable: false,
               maskClosable: false,
               onOk() {

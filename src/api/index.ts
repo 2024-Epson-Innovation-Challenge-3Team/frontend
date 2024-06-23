@@ -6,15 +6,33 @@ const client = axios.create({
 
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
 
+export type LoggedInUser = {
+  id: number,
+  name: string,
+  email: string,
+  profile: string | null,
+}
+
+export async function login(): Promise<LoggedInUser> {
+  await delay(200)
+
+  return {
+    id: 1,
+    name: '마장홍선',
+    email: 'ghdtjs@gmail.com',
+    profile: null,
+  }
+}
+
 export type AssignPrinterResult = {
   type: 'assignPrinter',
-  printerId: number,
+  printerId: string,
   printerName: string,
 }
 
 export type WaitResult = {
   type: 'wait',
-  queueNumber: number,
+  waitNumber: number,
 }
 
 export type NoFileResult = {
@@ -23,15 +41,32 @@ export type NoFileResult = {
 
 export type LocationVerificationResult = AssignPrinterResult | WaitResult | NoFileResult
 
-export async function verifyPrinter(printerId: number): Promise<LocationVerificationResult> {
-  console.log(printerId)
+// ✅
+export async function verifyPrinter(printerId: string): Promise<LocationVerificationResult> {
+  const { data: result } = await client.post('/print/QR', {
+    printerId,
+    printZoneId: 1,
+  })
+
+  return result.status === 'QUEUE'
+    ? {
+      type: 'wait',
+      waitNumber: result.waitingNum,
+    } : {
+      type: 'assignPrinter',
+      printerId,
+      printerName: result.printName,
+    }
+}
+
+export async function verifyZone(zoneId: number): Promise<LocationVerificationResult> {
+  console.log(zoneId)
 
   await delay(3000)
 
   return {
-    type: 'assignPrinter',
-    printerId: 1,
-    printerName: '3',
+    type: 'wait',
+    waitNumber: 3,
   }
 }
 
@@ -110,9 +145,12 @@ export async function getWaitingStatus(): Promise<WaitingStatus> {
   }
 }
 
-// TODO: printerId 인자로 받기
-export async function executePrinter() {
-
+// ✅
+export async function executePrinter(printerId: string) {
+  await client.post('/print/execute', {
+    printerId,
+    printZoneId: 1,
+  })
 }
 
 export type Printer = {
