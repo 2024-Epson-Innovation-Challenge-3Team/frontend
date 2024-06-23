@@ -44,7 +44,7 @@ export function useHomePage() {
       return null
     }
 
-    if (waitingStatus) {
+    if (waitingStatus && waitingStatus.no !== 0) {
       return {
         type: 'waitingStatus',
         content: `내 순서: ${waitingStatus.no}번째`,

@@ -1,42 +1,10 @@
-// import { getDefaultStore } from 'jotai'
+import axios from 'axios'
 
-// import { ClientAtom } from '@/atom'
+const client = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+})
 
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
-
-export type LoggedInUser = {
-  id: number,
-  name: string,
-  email: string,
-  profile: string | null,
-}
-
-export async function login(): Promise<LoggedInUser> {
-  // const client = getDefaultStore().get(ClientAtom)
-  await delay(200)
-
-  return {
-    id: 1,
-    name: '마장홍선',
-    email: 'ghdtjs@gmail.com',
-    profile: null,
-  }
-}
-
-export type JobReq = {
-  file: File,
-  count: number,
-  direction: string,
-  countPerPage: number,
-  side: string,
-}
-
-// deprecated
-export async function createJob(job: JobReq): Promise<void> {
-  console.log('job', job)
-
-  await delay(1000)
-}
 
 export type AssignPrinterResult = {
   type: 'assignPrinter',
@@ -55,24 +23,6 @@ export type NoFileResult = {
 
 export type LocationVerificationResult = AssignPrinterResult | WaitResult | NoFileResult
 
-// deprecated
-export async function verifyZone(zoneId: number): Promise<LocationVerificationResult> {
-  console.log(zoneId)
-
-  await delay(3000)
-
-  return {
-    type: 'wait',
-    queueNumber: 3,
-  }
-}
-
-
-
-
-
-
-
 export async function verifyPrinter(printerId: number): Promise<LocationVerificationResult> {
   console.log(printerId)
 
@@ -88,17 +38,30 @@ export async function verifyPrinter(printerId: number): Promise<LocationVerifica
 export type JobCreation = {
   file: File,
   name: string,
-  printCount: number, // 부 수
-  direction: string,
-  perPageCount: number, // 모아찍기
+  copyCount: number, // 부 수
+  direction: string, // ?
+  perPageCount: number, // 모아찍기 ?
   side: string,
   originPageCount: number,
   pageCount: number,
+  colorMode: string,
 }
 
-export async function createJob2(print: JobCreation) {
-  console.log(print)
-  await delay(2000)
+// ✅
+export async function createJob(print: JobCreation) {
+  const formData = new FormData()
+
+  formData.append('files', print.file)
+  formData.append('color_mode', print.colorMode)
+  formData.append('2_sided', print.side === 'double' ? '' : 'none')
+  formData.append('copies', print.copyCount.toString())
+  formData.append('page_cnt', print.pageCount.toString())
+
+  await client.post('/uploads', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
 }
 
 export type Job = {
@@ -114,63 +77,40 @@ export type Job = {
   createdAt: Date,
 }
 
+// ✅
 export async function getJobs(): Promise<Job[]> {
-  await delay(1000)
+  const { data: uploadedFiles } = await client.get('/users/uploads')
 
-  const now = new Date()
-
-  return [
-    {
-      id: 1,
-      name: 'abc.pdf',
-      printCount: 1,
-      direction: 'vertical',
-      perPageCount: 1,
-      side: 'single',
-      originPageCount: 10,
-      pageCount: 10,
-      status: 'pending',
-      createdAt: now,
-    },
-    {
-      id: 2,
-      name: 'motimoti.pdf',
-      printCount: 2,
-      direction: 'vertical',
-      perPageCount: 2,
-      side: 'single',
-      originPageCount: 12,
-      pageCount: 12,
-      status: 'pending',
-      createdAt: now,
-    },
-    {
-      id: 3,
-      name: 'epson.pdf',
-      printCount: 1,
-      direction: 'vertical',
-      perPageCount: 1,
-      side: 'double',
-      originPageCount: 5,
-      pageCount: 3,
-      status: 'pending',
-      createdAt: now,
-    },
-  ]
+  return uploadedFiles.map((file) => ({
+    id: file.uploadId,
+    name: file.fileName,
+    printCount: 1, // TODO
+    direction: 'vertical', // TODO
+    perPageCount: 1, // TODO
+    side: 'single', // TODO
+    originPageCount: 10, // TODO
+    pageCount: file.pageCnt ?? 1,
+    status: 'pending',
+    createdAt: new Date(file.createDate),
+  }))
 }
 
 export type WaitingStatus = {
   no: number,
 }
 
+// ✅
 export async function getWaitingStatus(): Promise<WaitingStatus> {
+  const { data: no } = await client.get('/queue/seq?printZoneId=1')
+
   await delay(2000)
 
   return {
-    no: 3,
+    no,
   }
 }
 
+// TODO: printerId 인자로 받기
 export async function executePrinter() {
 
 }
@@ -178,35 +118,26 @@ export async function executePrinter() {
 export type Printer = {
   id: number,
   name: string,
+  address: string,
   busyLevel: string,
   lat: number,
   lng: number,
 }
 
+// ✅
 export async function getPrinters(): Promise<Printer[]> {
-  await delay(2000)
+  const { data: zones } = await client.get('/zone')
 
-  return [
-    {
-      id: 1,
-      name: '1',
-      busyLevel: 'free',
-      lat: 0,
-      lng: 0,
-    },
-    {
-      id: 2,
-      name: '2',
-      busyLevel: 'busy',
-      lat: 0,
-      lng: 0,
-    },
-    {
-      id: 3,
-      name: '3',
-      busyLevel: 'full',
-      lat: 0,
-      lng: 0,
-    },
-  ]
+  return zones.map((zone) => ({
+    id: 0, // TODO
+    name: zone.zone_name,
+    address: zone.address,
+    busyLevel: zone.congestion >= 5
+      ? 'full'
+      : zone.congestion >= 1
+        ? 'busy'
+        : 'free',
+    lat: zone.la,
+    lng: zone.lo,
+  }))
 }

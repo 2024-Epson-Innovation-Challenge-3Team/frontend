@@ -8,7 +8,7 @@ export function useMap() {
 
   useLayoutEffect(() => {
     const newMap = new window.naver.maps.Map('map', {
-      center: new window.naver.maps.LatLng(37.3595704, 127.105399),
+      center: new window.naver.maps.LatLng(37.5110794, 127.0981638),
       zoom: 16,
       minZoom: 13,
       maxZoom: 19,

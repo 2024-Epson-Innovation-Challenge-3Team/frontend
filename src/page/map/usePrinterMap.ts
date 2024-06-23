@@ -29,10 +29,10 @@ export function usePrinterMap() {
         color = '#D3455B'
         busyLevel = '포화'
       } else if (printer.busyLevel === 'busy') {
-        color = '#1AAE9F'
+        color = '#F7C325'
         busyLevel = '혼잡'
       } else {
-        color = '#F7C325'
+        color = '#1AAE9F'
         busyLevel = '쾌적'
       }
 

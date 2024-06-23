@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 
 import { useMessage } from '@/hook'
-import { createJob, JobReq } from '@/api'
+import { createJob, JobCreation } from '@/api'
 
 const schema = z.object({
   count: z.number(),
@@ -42,7 +42,7 @@ export function useCreateJobPage() {
     }
   })
 
-  const { mutate: createJobMutate, isPending: isCreating } = useMutation<void, AxiosError, JobReq>({
+  const { mutate: createJobMutate, isPending: isCreating } = useMutation<void, AxiosError, JobCreation>({
     mutationFn: createJob,
   })
 
@@ -53,7 +53,14 @@ export function useCreateJobPage() {
 
     createJobMutate({
       file,
-      ...data,
+      name: '',
+      copyCount: data.count, // 부 수
+      direction: data.direction, // ?
+      perPageCount: data.countPerPage, // 모아찍기 ?
+      side: data.side,
+      originPageCount: 1,
+      pageCount: 1,
+      colorMode: 'mono',
     }, {
       onSuccess() {
         navigate(-1)
