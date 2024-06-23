@@ -97,6 +97,7 @@ export type JobCreation = {
 }
 
 export async function createJob2(print: JobCreation) {
+  console.log(print)
   await delay(2000)
 }
 
@@ -110,10 +111,13 @@ export type Job = {
   originPageCount: number,
   pageCount: number,
   status: string,
+  createdAt: Date,
 }
 
 export async function getJobs(): Promise<Job[]> {
   await delay(1000)
+
+  const now = new Date()
 
   return [
     {
@@ -126,6 +130,7 @@ export async function getJobs(): Promise<Job[]> {
       originPageCount: 10,
       pageCount: 10,
       status: 'pending',
+      createdAt: now,
     },
     {
       id: 2,
@@ -137,6 +142,7 @@ export async function getJobs(): Promise<Job[]> {
       originPageCount: 12,
       pageCount: 12,
       status: 'pending',
+      createdAt: now,
     },
     {
       id: 3,
@@ -148,18 +154,21 @@ export async function getJobs(): Promise<Job[]> {
       originPageCount: 5,
       pageCount: 3,
       status: 'pending',
+      createdAt: now,
     },
   ]
 }
 
 export type WaitingStatus = {
-
+  no: number,
 }
 
 export async function getWaitingStatus(): Promise<WaitingStatus> {
   await delay(2000)
 
-  return {}
+  return {
+    no: 3,
+  }
 }
 
 export async function executePrinter() {

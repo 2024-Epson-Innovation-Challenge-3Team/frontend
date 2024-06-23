@@ -1,4 +1,5 @@
 import { Flex, List, Tag, Button, Spin } from 'antd'
+import { formatInTimeZone } from 'date-fns-tz'
 
 import { useExecuteJobsPage } from './useExecuteJobsPage'
 
@@ -14,11 +15,23 @@ export function ExecuteJobsPage() {
 
   return (
     <Flex vertical style={{ height: '100%' }}>
-      <Flex flex='1 1 auto'>
+      <Flex
+        flex='1 1 auto'
+        vertical
+        style={{ padding: '0 8px' }}
+      >
         <List
           dataSource={jobs}
           loading={isLoadingJobs}
-          header={(<Spin spinning={!isLoadingJobs && isFetchingJobs} />)}
+          header={isPolling ? (
+            <Spin
+              spinning={!isLoadingJobs && isFetchingJobs}
+              size='small'
+              tip='최신 상태 조회중'
+            >
+              <div style={{ padding: '20px' }} />
+            </Spin>
+          ) : null}
           renderItem={(job) => (
             <List.Item
               key={job.id}
@@ -28,7 +41,13 @@ export function ExecuteJobsPage() {
             >
               <List.Item.Meta
                 title={job.name}
-                // description={}
+                description={(
+                  <>
+                    <strong>{`${job.pageCount}페이지`} </strong>
+                    <span>|</span>
+                    <span> {formatInTimeZone(job.createdAt, 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss')}</span>
+                  </>
+                )}
               />
             </List.Item>
           )}
